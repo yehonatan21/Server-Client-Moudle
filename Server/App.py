@@ -1,7 +1,10 @@
+import sys 
 from CarRace import CarRace
 import time
 
 #1 main for all the program in the App.
+
+sys.path.append('/Users/macbook/Desktop/Python Projects/Cars/Client') #FIXME: Make this more portable
 
 def main():
     # for i in range(2):
@@ -11,7 +14,6 @@ def main():
             racers_num = int(input("please select number of racers btween 2-9:\n"))
         except:
             pass
-    #race = CarRace(-1,-1)
     race = CarRace(racers_num)
     race.draw_board()
     time.sleep(1)

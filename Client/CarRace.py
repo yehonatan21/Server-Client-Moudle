@@ -1,11 +1,14 @@
 import turtle
 import random
+import sys 
 from Factory import Factory
 
 #create interface called "iborad" including the metonds create_board, create_racers, race
 #to learn module
 #app structure in python - https://realpython.com/python-application-layouts/ - Application with Internal Packages
 #turn CarRace and Factory to an instance
+
+sys.path.append('/Users/macbook/Desktop/Python Projects/Cars/Server') #FIXME: Change this to be more portable
 
 class CarRace():
 
