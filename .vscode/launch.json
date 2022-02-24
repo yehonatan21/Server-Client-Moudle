@@ -8,7 +8,21 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "app.py",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Server",
+            "type": "python",
+            "request": "launch",
+            "program": "Server/App.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Client",
+            "type": "python",
+            "request": "launch",
+            "program": "Client/client.py",
             "console": "integratedTerminal"
         }
     ]

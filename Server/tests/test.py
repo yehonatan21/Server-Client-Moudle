@@ -1,11 +1,25 @@
-# message = 'You have discinnected successfully.'
-# if message == 'a' and  message =='b':
-#     print('first')
-# if message == 'You have discinnected successfully.' or 'Refuse' or 'You left the chat room': #HOW is that working?
-#     print('the big one')
-# if message == 'a' or message =='b':
-    #  print('second')
-# message = '/kick yehonatan'
-clientnick = {"client": "admin"} 
-print(len(clientnick))
-print
+import unittest
+import sys 
+# import os
+# sys.path.append('C:\\Users\\User\\Desktop\\Car-Race\\Server')
+sys.path.append('./Server')
+from server import Server
+# print(sys.path)
+# print('Current Directory: ' + os.getcwd())
+# import server
+# print(dir(server.Server))
+
+class TestServer(unittest.TestCase):  
+    
+    def test_connection(self):
+        s = Server()
+        s.startServer()
+        self.assertTrue(self.s.receiveConnections())
+
+    def test_connection2(self):
+        s = Server()
+        s.startServer()
+        self.assertTrue(self.s.receiveConnections())
+
+if __name__ == "__main__":
+    unittest.main()
