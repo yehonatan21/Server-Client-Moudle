@@ -3,7 +3,7 @@ import threading
 import CarRace
 #TODO: opening the race from the server
 
-HOST =  socket.gethostbyname('')
+HOST =  "127.0.0.1" #TODO: Discovery/configuration
 PORT = 6050
 FORMAT = 'utf-8'
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

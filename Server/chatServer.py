@@ -1,8 +1,11 @@
 import socket
 import threading
 import sys
+import os
 import traceback
-
+sys.path.append('./Utilities')
+print (os.getcwd())
+from server import Server
 
 # BUG: how to kill a server
 
@@ -10,24 +13,9 @@ def get_traceback(e):
     lines = traceback.format_exception(type(e), e, e.__traceback__)
     return ''.join(lines)
 
-class Server():
-    port = None# = 6050
-    FORMAT = 'utf-8'
-    # listener = None
-    listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   
-
-    def __init__(self, port = 6050):
-        # body of the constructor
-        self.port = port
-
-    def startServer(self):
-        host = socket.gethostbyname('')
-        self.listener.bind((host, self.port))
-        self.listener.listen(4)
-        self.__receiveConnections()
-
+class ChatServer(Server):
     __clientnick = {}  # FIXME: to replace the keys and the values
+    __FORMAT = 'utf-8'
 
     def __broadcast(self, message, sender=None):
         for client in self.__clientnick:
@@ -114,16 +102,7 @@ class Server():
         del self.__clientnick[client]
         client.close()
 
-    def __receiveConnections(self):
-        print(f'Server is running and listening on port {self.port}...')
-        while True:
-            client, address = self.listener.accept()
-            print(f'connection is established with {str(address)}')
-            thread = threading.Thread(
-                target=self.__handle_client, args=(client,))
-            thread.start()
-
 
 if __name__ == "__main__":
-    s = Server()
+    s = ChatServer()
     s.startServer()
