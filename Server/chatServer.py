@@ -1,10 +1,6 @@
-import socket
-import threading
 import sys
-import os
 import traceback
 sys.path.append('./Utilities')
-print (os.getcwd())
 from server import Server
 
 # BUG: how to kill a server
@@ -22,7 +18,7 @@ class ChatServer(Server):
             if self.__clientnick.get(sender) != self.__clientnick.get(client):
                 client.send(message.encode(self.FORMAT))
 
-    def __handle_client(self, client):
+    def _Server__handle_client(self, client):
         client.send('nickname'.encode(self.FORMAT))
         nickname = client.recv(1024).decode(self.FORMAT)
         if self.__if_nickname_exist(nickname, client):

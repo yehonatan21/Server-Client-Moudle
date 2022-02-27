@@ -1,6 +1,4 @@
 from server import Server
-import socket
-import threading
 
 class discoveryServer(Server):
   

@@ -1,9 +1,8 @@
 import socket
 import threading
-import CarRace
-#TODO: opening the race from the server
+# import CarRace
 
-HOST =  "127.0.0.1" #TODO: Discovery/configuration
+HOST =  "127.0.0.1" #TODO: Discovery
 PORT = 6050
 FORMAT = 'utf-8'
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,12 +46,11 @@ class Client():
                     print('The server is down. Click enter to exit.')
                     client.close()
                     self.__stop_loops = True
-                # if message ==  '/start_race':
-                #     race = CarRace(racers_num)
-
-                # if message == 'This nickname is already exist. Please send a new nickname':
-                #     self.__nickname = input('The nickname you choose is already exist. Please choose new nickname:\n')
-                #     client.send(self.__nickname.encode(FORMAT))
+                if message == 'IP':
+                    client.send('send'.encode(FORMAT))
+                    serverIP = client.recv(1024).decode(FORMAT)
+                    self.__connectServer(serverIP)
+                    client.close()
             except:
                 print('An error occured!')
                 client.close()
@@ -65,6 +63,9 @@ class Client():
             message = f'{input("")}'
             client.send(message.encode(FORMAT))
     
+    def __connectServer(self, serverIP):
+        client.connect((serverIP,PORT))
+
     def create_thread(self):
         receive_thread = threading.Thread(target=self.__receive_message)
         receive_thread.start()
