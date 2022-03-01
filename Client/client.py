@@ -1,59 +1,61 @@
 import socket
 import threading
-# import CarRace
+from configparser import ConfigParser
 
-HOST =  "127.0.0.1" #TODO: Discovery
-PORT = 6050
-FORMAT = 'utf-8'
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect((HOST,PORT))
-
+#TODO: Remove all code and leave only a class
 
 class Client():
 
+    def __init__(self, nick, password):
+        #TODO: Take out to configuration - Done
+        self.__stop_loops = False
+        ipConfig = ConfigParser()
+        ipConfig.read('./Utilities/IPconfig.ini')
+        self.__HOST = ipConfig['IP']['HOST']
+        self.__PORT =ipConfig['IP']['PORT']
+        self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__client.connect((self.__HOST,self.__PORT))
 
-    __nickname = input('what is your nickname?\n')
-    __stop_loops = False
-    if __nickname == 'admin':
-        __password = input('Plese enter the password:\n')
-
+    def __printToUser(self, message):
+        print(message)
 
     def __receive_message(self):
         while True:
             if self.__stop_loops:
                 break
             try:
-                message = client.recv(1024).decode(FORMAT)
+                message = self.__client.recv(1024).decode(self.__FORMAT) #TODO: make it match insted of if-else
                 if message == 'nickname':
-                    client.send(self.__nickname.encode(FORMAT))
-                    message = client.recv(1024).decode(FORMAT)
+                    self.__client.send(self.__nickname.encode(self.__FORMAT))
+                    message = self.__client.recv(1024).decode(self.__FORMAT)
                     if message  == 'PASS':
-                        client.send(self.__password.encode(FORMAT))
-                        message = client.recv(1024).decode(FORMAT)
+                        self.__client.send(self.__password.encode(self.__FORMAT))
+                        message = self.__client.recv(1024).decode(self.__FORMAT)
                         if message == 'Refuse':
-                            print('Connection refused. Wrong password!')
+                            self.__printToUser('Connection refused. Wrong password!')
                             self.__stop_loops = True
                         else:
-                            print(message) 
+                            self.__printToUser(message) 
                     else:
-                        print(message) 
+                        self.__printToUser(message) 
                 else:
-                    print(message) 
-                if message == 'You have discinnected successfully.' and 'Refuse' and 'You left the chat room' and 'You have been kicket from the chat room': #FIXME: OR is not working
+                    self.__printToUser(message) 
+                if message == 'You have discinnected successfully.' or 'Refuse' or 'You left the chat room' or 'You have been kicket from the chat room': #FIXME: OR is not working
                     self.__stop_loops = True
                 if message == '':
-                    print('The server is down. Click enter to exit.')
-                    client.close()
+                    self.__printToUser('The server is down. Click enter to exit.')
+                    self.__client.close()
                     self.__stop_loops = True
                 if message == 'IP':
-                    client.send('send'.encode(FORMAT))
-                    serverIP = client.recv(1024).decode(FORMAT)
+                    self.__client.send('send'.encode(self.__FORMAT))
+                    serverIP = self.__client.recv(1024).decode(self.__FORMAT)
+                    self.__client.close()
                     self.__connectServer(serverIP)
-                    client.close()
-            except:
-                print('An error occured!')
-                client.close()
+            except Exception as e:
+                self.__printToUser(e)
+                self.__printToUser('An error occured!')
+                self.__client.close()
                 self.__stop_loops = True
 
     def __write_message(self): #FIXME: how can i immediately breakthis loop like rhe recive loop without pressing the enter buttom
@@ -61,10 +63,10 @@ class Client():
             if self.__stop_loops:
                 break
             message = f'{input("")}'
-            client.send(message.encode(FORMAT))
+            self.__client.send(message.encode(self.__FORMAT))
     
     def __connectServer(self, serverIP):
-        client.connect((serverIP,PORT))
+        self.__client.connect((serverIP,self.__PORT))
 
     def create_thread(self):
         receive_thread = threading.Thread(target=self.__receive_message)
@@ -73,5 +75,10 @@ class Client():
         write_thread = threading.Thread(target=self.__write_message)
         write_thread.start() 
 
-c = Client()
-c.create_thread()
+#TODO: Add if main and run all the code from there - Done.
+if __name__ == "__main__":
+    nickname = input('what is your nickname?\n')
+    if nickname == 'admin':
+        password = input('Plese enter the password:\n')
+    c = Client(nickname,password)
+    c.create_thread()
