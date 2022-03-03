@@ -3,8 +3,8 @@ from CarRace import CarRace
 import time
 
 #1 main for all the program in the App.
-#TODO: Put all the car race logic in a new folder/module
-sys.path.append('/Users/macbook/Desktop/Python Projects/Cars/Client') #FIXME: Make this more portable
+#TODO: Put all the car race logic in a new folder/module - Done
+sys.path.append('./Utilities') #FIXME: Make this more portable - Done.
 
 def main():
 

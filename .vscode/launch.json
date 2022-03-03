@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Run Car Raec",
+            "type": "python",
+            "request": "launch",
+            "program": "App.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/Car Race"
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
@@ -15,15 +23,33 @@
             "name": "Run Server",
             "type": "python",
             "request": "launch",
-            "program": "Server/App.py",
-            "console": "integratedTerminal"
+            "program": "server.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/Server"
+        },
+        {
+            "name": "Run Chat Server",
+            "type": "python",
+            "request": "launch",
+            "program": "App.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/Server"
+        },
+        {
+            "name": "Run Dicovery Server",
+            "type": "python",
+            "request": "launch",
+            "program": "App.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/Server"
         },
         {
             "name": "Run Client",
             "type": "python",
             "request": "launch",
-            "program": "Client/client.py",
-            "console": "integratedTerminal"
+            "program": "client.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/Client"
         }
     ]
 }

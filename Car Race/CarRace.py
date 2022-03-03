@@ -8,7 +8,7 @@ import sys
 #app structure in python - https://realpython.com/python-application-layouts/ - Application with Internal Packages
 #turn CarRace and Factory to an instance
 
-sys.path.append('/Users/macbook/Desktop/Python Projects/Cars/Server') #FIXME: Change this to be more portable
+sys.path.append('./Utilities') #FIXME: Change this to be more portable - Done.
 
 class CarRace():
 

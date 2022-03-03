@@ -3,20 +3,28 @@ import threading
 from configparser import ConfigParser
 
 
-#TODO: Remove all code and leave only a class
+#TODO: Remove all code and leave only a class - Done.
 
 class Client():
 
-    def __init__(self, nick, password):
+    def __init__(self, nick, password = None):
         #TODO: Take out to configuration - Done
+        self.__nickname = nick
+        self.__password = password
         self.__stop_loops = False
         ipConfig = ConfigParser()
-        ipConfig.read('./Utilities/IPconfig.ini')
+        ipConfig.read('./config.ini')
+        print(ipConfig.sections())
         self.__HOST = ipConfig['IP']['HOST']
-        self.__PORT =ipConfig['IP']['PORT']
-        self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__client.connect((self.__HOST,self.__PORT))
+        self.__PORT =int(ipConfig['IP']['PORT'])
+        print(self.__HOST)
+        print(self.__PORT)
 
+    def connectClientToServer(self):
+        self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__client.connect((self.__HOST,self.__PORT))#TODO: Config files need to be fixed to be without strings
+        self.__create_thread()
+        
     def __printToUser(self, message):
         print(message)
 
@@ -25,7 +33,7 @@ class Client():
             if self.__stop_loops:
                 break
             try:
-                message = self.__client.recv(1024).decode(self.__FORMAT) #TODO: make it match insted of if-else
+                message = self.__client.recv(1024).decode(self.__FORMAT) #TODO: make it match insted of if-else?
                 if message == 'nickname':
                     self.__client.send(self.__nickname.encode(self.__FORMAT))
                     message = self.__client.recv(1024).decode(self.__FORMAT)
@@ -68,7 +76,9 @@ class Client():
     def __connectServer(self, serverIP):
         self.__client.connect((serverIP,self.__PORT))
 
-    def create_thread(self):
+    def __create_thread(self):
+        #Connect to discovery server
+        #TODO: Make this self explantory - Done
         receive_thread = threading.Thread(target=self.__receive_message)
         receive_thread.start()
 
@@ -78,7 +88,8 @@ class Client():
 #TODO: Add if main and run all the code from there - Done.
 if __name__ == "__main__":
     nickname = input('what is your nickname?\n')
+    password = None
     if nickname == 'admin':
         password = input('Plese enter the password:\n')
     c = Client(nickname,password)
-    c.create_thread()
+    c.connectClientToServer()

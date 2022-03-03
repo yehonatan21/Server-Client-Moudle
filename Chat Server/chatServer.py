@@ -1,6 +1,7 @@
 import logging
 import sys
 import traceback
+import socket
 sys.path.append('./Utilities')
 from server import Server
 
@@ -11,7 +12,7 @@ def get_traceback(e):
     return ''.join(lines)
 
 
-class ChatServer(Server):
+class ChatServer(Server(6040,socket.SOCK_STREAM)):
 
 
     __clientnick = {}  # FIXME: to replace the keys and the values
