@@ -1,8 +1,8 @@
 import socket
 import threading
 from configparser import ConfigParser
-import os
-print(os.getcwd())
+# import os
+# print(os.getcwd())
 
 
 #TODO: Remove all code and leave only a class - Done.
@@ -44,7 +44,7 @@ class Client():
         #TODO: Config files need to be fixed to be without strings - Done.
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(f'trying to connect to {self.__HOST}:{self.__PORT}')
-        self.__client.connect((self.__HOST,self.__PORT)) #FIXME: Need to run the both the chatServer and the discoveryServer.
+        self.__client.connect((self.__HOST,self.__PORT))
         print(f'connected succefuly to {self.__HOST}:{self.__PORT}')
         self.__create_thread()
         

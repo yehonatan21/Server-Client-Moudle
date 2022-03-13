@@ -5,10 +5,10 @@ import socket
 import threading
 import traceback
 import logging
-import os
-print(os.getcwd())
+# import os
+# print(os.getcwd())
 
-# FIXME: how to kill a server - 
+# FIXME: how to kill a server 
 
 
 def get_traceback(e):
@@ -28,7 +28,7 @@ class Server():
     def restartServer():
         pass
 
-    def __init__(self, port = 6050, socketType = socket.SOCK_STREAM): #TODO: Remove the default values when the right time will come
+    def __init__(self, port = 6050, socketType = socket.SOCK_STREAM, loggingName = __name__): #TODO: Remove the default values when the right time will come
         print('1')
         #TODO: Change to private - Done.
         self.__port = port
@@ -36,9 +36,9 @@ class Server():
         self.__listener = socket.socket(socket.AF_INET, socketType)
         print('3')
         logging.basicConfig(
-            filename='server.logs',
+            filename=f'{loggingName} .logs',
             level=logging.INFO,
-            format='%(levelname)s:%(message)s'
+            format='%(asctime)s:%(levelname)s:%(message)s'
         )
         print('4')
 
@@ -57,7 +57,7 @@ class Server():
             if isTCP:
                 self.__listener.listen(4)
                 logging.info(f'TCP Server is running and listening on port {self.__port}...')
-                client, address = self.__listener.accept() #TODO: Check the option to take this out of the loop
+                client, address = self.__listener.accept() #TODO: Check the option to take this out of the loop - Why?
                 logging.info(f'connection is established with {str(address)}')
             else:
                 logging.info(f'UDP Server is running on port {self.__port}...')
