@@ -2,8 +2,11 @@ import logging
 import sys
 import traceback
 import socket
-sys.path.append('./Utilities')
-from server import Server
+from configparser import ConfigParser
+sys.path.append("C:\\Users\\User\\Desktop\\Car-Race\\Server") #FIXME: Can't run from cmd like  
+from server import Server 
+import os
+print(os.getcwd())
 
 # BUG: how to kill a server
 
@@ -12,17 +15,23 @@ def get_traceback(e):
     return ''.join(lines)
 
 
-class ChatServer(Server(6040,socket.SOCK_STREAM)):
+class ChatServer(Server):
 
-
-    __clientnick = {}  # FIXME: to replace the keys and the values
+    def __init__(self, port):
+            super().__init__(port, socket.SOCK_STREAM)
+            self.serverConfig = ConfigParser()
+            readFile = self.serverConfig.read('./Chat Server/config.ini')
+            if len(readFile) == 0:
+                raise NameError("No configuration file")
+            self.__FORMAT = self.serverConfig ['MSG']['FORMAT']
+            self.__clientnick = {}
 
     def __broadcast(self, message, sender=None):
         for client in self.__clientnick:
             if self.__clientnick.get(sender) != self.__clientnick.get(client):
                 client.send(message.encode(self.__FORMAT))
 
-    def _Server__handle_client(self, client):
+    def _Server__handle_client(self, client, msg = None):
         #TODO: Put this code inside a while?
         client.send('nickname'.encode(self.__FORMAT))
         nickname = client.recv(1024).decode(self.__FORMAT)
@@ -105,5 +114,5 @@ class ChatServer(Server(6040,socket.SOCK_STREAM)):
 
 
 if __name__ == "__main__":
-    s = ChatServer(6051)
+    s = ChatServer(6052)
     s.startServer()

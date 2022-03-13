@@ -5,7 +5,10 @@ import socket
 import threading
 import traceback
 import logging
-# BUG: how to kill a server
+import os
+print(os.getcwd())
+
+# FIXME: how to kill a server - 
 
 
 def get_traceback(e):
@@ -15,6 +18,15 @@ def get_traceback(e):
 #TODO: Change all prints in all modules to logging - https://docs.python.org/3/howto/logging.html - Done.
 class Server():
    
+
+    def startServer():
+        pass
+    
+    def stopServer():
+        pass
+    
+    def restartServer():
+        pass
 
     def __init__(self, port = 6050, socketType = socket.SOCK_STREAM): #TODO: Remove the default values when the right time will come
         print('1')
@@ -34,11 +46,13 @@ class Server():
         print('5')
         host = socket.gethostbyname('')
         print('6')
+        print(f'trying to bind on port {self.__port}')
         self.__listener.bind((host,self.__port))
         print('7')
         isTCP = self.__listener.type == socket.SocketKind.SOCK_STREAM
+        print(f'Is TCP: {isTCP}') #FIXME: logging level - debug
         message = None
-        bufferSize  = 1024
+        bufferSize = 1024
         while True:
             if isTCP:
                 self.__listener.listen(4)
@@ -46,15 +60,13 @@ class Server():
                 client, address = self.__listener.accept() #TODO: Check the option to take this out of the loop
                 logging.info(f'connection is established with {str(address)}')
             else:
-                logging.info(f'UDP Server is running and listening on port {self.__port}...')
-                client = self.__listener
-                bytesAddressPair  = client.recvfrom(bufferSize) #TODO: Change the syntax to be like the accept
-                message = bytesAddressPair[0]
-                address = bytesAddressPair[1]
-            thread = threading.Thread(target=self.__handle_client, args=(client, address, message)) #BUG: to fix the target __handle_client to work in the chatServer - Done.
+                logging.info(f'UDP Server is running on port {self.__port}...')
+                client = self.__listener #What is that?
+                msg, address  = self.__listener.recvfrom(bufferSize) #TODO: Change the syntax to be like the accept - Done.
+            thread = threading.Thread(target=self.__handle_client, args=(client, address)) #BUG: to fix the target __handle_client to work in the chatServer - Done.
             thread.start()
             print('8')
-        print("9")     
+        # print("9")     
         
     def __handle_client(self, client, address, message):
         print(message)

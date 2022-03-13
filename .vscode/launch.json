@@ -31,17 +31,17 @@
             "name": "Run Chat Server",
             "type": "python",
             "request": "launch",
-            "program": "App.py",
+            "program": "chatServer.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/Server"
+            "cwd": "${workspaceFolder}/Chat Server"
         },
         {
             "name": "Run Dicovery Server",
             "type": "python",
             "request": "launch",
-            "program": "App.py",
+            "program": "discoveryServer.py",
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/Server"
+            "cwd": "${workspaceFolder}/Discovery Server"
         },
         {
             "name": "Run Client",
