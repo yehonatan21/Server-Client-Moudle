@@ -36,9 +36,9 @@ class Server():
         self.__listener = socket.socket(socket.AF_INET, socketType)
         print('3')
         logging.basicConfig(
-            filename=f'{loggingName} .logs',
-            level=logging.INFO,
-            format='%(asctime)s:%(levelname)s:%(message)s'
+            filename=f'{loggingName}.logs',
+            level=logging.DEBUG,
+            format='%(asctime)s: %(levelname)s: %(message)s'
         )
         print('4')
 
@@ -50,17 +50,17 @@ class Server():
         self.__listener.bind((host,self.__port))
         print('7')
         isTCP = self.__listener.type == socket.SocketKind.SOCK_STREAM
-        print(f'Is TCP: {isTCP}') #FIXME: logging level - debug
+        print(f'Is TCP: {isTCP}') #FIXME: logging level - debug - Done. 
         message = None
         bufferSize = 1024
         while True:
             if isTCP:
                 self.__listener.listen(4)
-                logging.info(f'TCP Server is running and listening on port {self.__port}...')
+                logging.debug(f'TCP Server is running and listening on port {self.__port}...')
                 client, address = self.__listener.accept() #TODO: Check the option to take this out of the loop - Why?
-                logging.info(f'connection is established with {str(address)}')
+                logging.debug(f'connection is established with {str(address)}')
             else:
-                logging.info(f'UDP Server is running on port {self.__port}...')
+                logging.debug(f'UDP Server is running on port {self.__port}...')
                 client = self.__listener #What is that?
                 msg, address  = self.__listener.recvfrom(bufferSize) #TODO: Change the syntax to be like the accept - Done.
             thread = threading.Thread(target=self.__handle_client, args=(client, address)) #BUG: to fix the target __handle_client to work in the chatServer - Done.
