@@ -3,5 +3,8 @@
         "./Server",
         "./Client",
         "./Utilities"
-    ]
+    ],
+    // "python.formatting.provider": "yapf",
+    // "python.formatting.provider": "black",
+    // "python.formatting.provider": "autopep8"
 }

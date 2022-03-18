@@ -1,20 +1,16 @@
 import socket
 import threading
 from configparser import ConfigParser
-# import os
-# print(os.getcwd())
+import os #TODO: Import only when debug
+print(os.getcwd()) #TODO: change to logging
 
-
-#TODO: Remove all code and leave only a class - Done.
-
+#TODO: sepeareat to coreClient and clientImplementaion
 class Client():
-
-    def __init__(self, nick, password = None):
-        #TODO: Take out to configuration - Done
+    def __init__(self, nick, password = None): #TODO: Talk about the password
         self.__nickname = nick
         self.__password = password
         self.__stop_loops = False
-        readConfig = ConfigParser()#TODO: Change the variable name - Done.
+        readConfig = ConfigParser()#TODO: Change the variable name
         readConfig.read('./config.ini') #TODO: add config check
         print(readConfig.sections())
         self.__DISCOVERY_IP = readConfig['DiscoveryServer']['IP']
@@ -29,19 +25,14 @@ class Client():
         serverAddressPort = (self.__DISCOVERY_IP, self.__DISCOVERY_PORT)
         self.__client.sendto(str.encode("KK"), serverAddressPort)
         bufferSize = 1024
-        msgFromServer = self.__client.recvfrom(bufferSize) #FIXME: Make this work against the discovery server - Done.
-        # print(type(msgFromServer))
-        # print(msgFromServer[1])
+        msgFromServer = self.__client.recvfrom(bufferSize)
         msg = msgFromServer[0].decode(self.__FORMAT)
-        print(f'Message from Server: {msg}')
+        print(f'Message from Discovery Server: "{msg}"')
         connectionInfo = msg.split(':')
         self.__HOST = connectionInfo[0]
         self.__PORT = int(connectionInfo[1])
         print(f'About to connect to: {self.__HOST}:{self.__PORT}')
-        # print(self.__HOST)
-        # print(self.__PORT)
         
-        #TODO: Config files need to be fixed to be without strings - Done.
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(f'trying to connect to {self.__HOST}:{self.__PORT}')
         self.__client.connect((self.__HOST,self.__PORT))
@@ -56,8 +47,8 @@ class Client():
             if self.__stop_loops:
                 break
             try:
-                message = self.__client.recv(1024).decode(self.__FORMAT) #TODO: make it match insted of if-else?
-                if message == 'nickname':
+                message = self.__client.recv(1024).decode(self.__FORMAT)
+                if message == 'nickname': #TODO: make it match-case insted of if-else?
                     self.__client.send(self.__nickname.encode(self.__FORMAT))
                     message = self.__client.recv(1024).decode(self.__FORMAT)
                     if message  == 'PASS':
@@ -72,7 +63,7 @@ class Client():
                         self.__printToUser(message) 
                 else:
                     self.__printToUser(message) 
-                if message == 'You have discinnected successfully.' or 'Refuse' or 'You left the chat room' or 'You have been kicket from the chat room': #FIXME: OR is not working
+                if message == ('You have discinnected successfully.' or 'Refuse' or 'You left the chat room' or 'You have been kicket from the chat room'): #TODO: get codes insted of strings
                     self.__stop_loops = True
                 if message == '':
                     self.__printToUser('The server is down. Click enter to exit.')
@@ -89,9 +80,10 @@ class Client():
                 self.__client.close()
                 self.__stop_loops = True
 
-    def __write_message(self): #FIXME: how can i immediately breakthis loop like rhe recive loop without pressing the enter buttom
+    def __write_message(self):
+        message = None
         while True:
-            if self.__stop_loops:# BUG: Not Working
+            if self.__stop_loops or message == "/exit":
                 break
             message = f'{input("")}'
             self.__client.send(message.encode(self.__FORMAT))
@@ -101,14 +93,13 @@ class Client():
 
     def __create_thread(self):
         #Connect to discovery server
-        #TODO: Make this self explantory - Done
+        #TODO: Make this self explantory
         receive_thread = threading.Thread(target=self.__receive_message)
         receive_thread.start()
 
         write_thread = threading.Thread(target=self.__write_message)
-        write_thread.start() 
+        write_thread.start()
 
-#TODO: Add if main and run all the code from there - Done.
 if __name__ == "__main__":
     # nickname = input('what is your nickname?\n')
     nickname = "TEST"

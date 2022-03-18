@@ -5,19 +5,20 @@ import socket
 from configparser import ConfigParser
 sys.path.append('../Server')  
 from server import Server 
-# import os
-# print(os.getcwd())
+import os #TODO: Import only when debug
+print(os.getcwd()) #TODO: change to logging
 
-def get_traceback(e):
+def get_traceback(e): #TODO: Take out to separeated moudle
     lines = traceback.__FORMAT_exception(type(e), e, e.__traceback__)
     return ''.join(lines)
 
+#TODO: send codes insted of strings to the client 
+#TODO: documaent all the code using pydoc - https://docs.python.org/3/library/pydoc.html
 
 class ChatServer(Server):
-
     def __init__(self, port):
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
-            self.serverConfig = ConfigParser()
+            self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
             readFile = self.serverConfig.read('./config.ini')
             if len(readFile) == 0:
                 raise NameError("No configuration file")
@@ -29,8 +30,7 @@ class ChatServer(Server):
             if self.__clientnick.get(sender) != self.__clientnick.get(client):
                 client.send(message.encode(self.__FORMAT))
 
-    def _Server__handle_client(self, client, msg = None):
-        #TODO: Put this code inside a while?
+    def _Server__handle_client(self, client, address):
         client.send('nickname'.encode(self.__FORMAT))
         nickname = client.recv(1024).decode(self.__FORMAT)
         if self.__if_nickname_exist(nickname, client):
@@ -74,7 +74,7 @@ class ChatServer(Server):
     def __if_nickname_exist(self, nickname, client):
         for checkclient in self.__clientnick:
             if nickname == self.__clientnick.get(checkclient):
-                client.send('This nickname is already exist. Please send a new nickname'.encode(self.__FORMAT))  # TODO: insted of disconnection let the client choose another nickname
+                client.send('This nickname is already exist. Please send a new nickname'.encode(self.__FORMAT))  # FIXME: insted of disconnection let the client choose another nickname
                 client.close()
                 return True
 
@@ -84,7 +84,7 @@ class ChatServer(Server):
             self.__close_connection(exit_message, client)
             return True
 
-        if message.startswith('/kick'):  # FIXME: admin functions
+        if message.startswith('/kick'):  # TODO: admin functions
             if self.__clientnick.get(client) == 'admin':
 
                 for check_client in self.__clientnick:

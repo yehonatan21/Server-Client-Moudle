@@ -1,20 +1,18 @@
 #FIXME: create log file for all the flies in the program acorrdinig to ther name, and add date and time (with ms) - Done.
 
-print("Starting Discovery Server File")
-from ctypes.wintypes import MSG
+# from ctypes.wintypes import MSG
 import socket
-# import path
-import os
-print(os.getcwd()) #change to logging
+import os #TODO: Import only when debug
+print(os.getcwd()) #TODO: change to logging
 import sys
-sys.path.append('../Server') #TODO: Add this to the configuration - can it be?
+sys.path.append('../Server') #TODO: Add this to the configuration?
 from server import Server 
 from configparser import ConfigParser
-class discoveryServer(Server): #TODO: Change to UDP - Done.
-  
+
+class discoveryServer(Server):
     def __init__(self, port):
         super().__init__(port, socket.SOCK_DGRAM, "Discovery Server")
-        self.serverConfig = ConfigParser()
+        self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
         
         readFile = self.serverConfig.read('./config.ini')
         if len(readFile) == 0:
@@ -27,7 +25,7 @@ class discoveryServer(Server): #TODO: Change to UDP - Done.
         chatServerHost = self.serverConfig['chatServer']['HOST']
         chatServerPort =self.serverConfig['chatServer']['PORT']
         print(f'sending to {address[0]},{address[1]}: "{chatServerHost}:{chatServerPort}"')
-        client.sendto(f'{chatServerHost}:{chatServerPort}'.encode(self.__FORMAT), (address[0],address[1])) #TODO: move the IP to a configuration file - Done.
+        client.sendto(f'{chatServerHost}:{chatServerPort}'.encode(self.__FORMAT), (address[0],address[1]))
 
 
 if __name__ == "__main__":
