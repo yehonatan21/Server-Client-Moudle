@@ -3,12 +3,10 @@ import sys
 import traceback
 import socket
 from configparser import ConfigParser
-sys.path.append("C:\\Users\\User\\Desktop\\Car-Race\\Server") #FIXME: Can't run from cmd like  
+sys.path.append('../Server')  
 from server import Server 
 # import os
 # print(os.getcwd())
-
-# BUG: how to kill a server
 
 def get_traceback(e):
     lines = traceback.__FORMAT_exception(type(e), e, e.__traceback__)
@@ -20,7 +18,7 @@ class ChatServer(Server):
     def __init__(self, port):
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
             self.serverConfig = ConfigParser()
-            readFile = self.serverConfig.read('./Chat Server/config.ini')
+            readFile = self.serverConfig.read('./config.ini')
             if len(readFile) == 0:
                 raise NameError("No configuration file")
             self.__FORMAT = self.serverConfig ['MSG']['FORMAT']
@@ -76,8 +74,7 @@ class ChatServer(Server):
     def __if_nickname_exist(self, nickname, client):
         for checkclient in self.__clientnick:
             if nickname == self.__clientnick.get(checkclient):
-                client.send('This nickname is already exist. Please send a new nickname'.encode(
-                    self.__FORMAT))  # TODO: insted of diconnection let the client choose another nickname
+                client.send('This nickname is already exist. Please send a new nickname'.encode(self.__FORMAT))  # TODO: insted of disconnection let the client choose another nickname
                 client.close()
                 return True
 
