@@ -1,27 +1,24 @@
 #FIXME: create log file for all the flies in the program acorrdinig to ther name, and add date and time (with ms) - Done.
 
+print("Starting Discovery Server File")
 from ctypes.wintypes import MSG
 import socket
 # import path
 import os
-import sys 
-sys.path.append('./Server') #TODO: Add this to the configuration - can it be?
-sys.path.append("C:\\Users\\User\\Desktop\\Car-Race\\Server") #FIXME: Can't run from cmd like sys.path.append('./Server')
+print(os.getcwd()) #change to logging
+import sys
+sys.path.append('../Server') #TODO: Add this to the configuration - can it be?
 from server import Server 
 from configparser import ConfigParser
-# import os
-# print(os.getcwd())
-
-
 class discoveryServer(Server): #TODO: Change to UDP - Done.
   
     def __init__(self, port):
         super().__init__(port, socket.SOCK_DGRAM, "Discovery Server")
         self.serverConfig = ConfigParser()
         
-        readFile = self.serverConfig.read('./Discovery Server/config.ini')
+        readFile = self.serverConfig.read('./config.ini')
         if len(readFile) == 0:
-            raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - Done.
+            raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file.
         self.__HOST = self.serverConfig['IP']['HOST']
         self.__PORT =self.serverConfig['IP']['PORT']
         self.__FORMAT = self.serverConfig ['MSG']['FORMAT']
