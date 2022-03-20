@@ -11,8 +11,12 @@ class Client():
         self.__password = password
         self.__stop_loops = False
         readConfig = ConfigParser()#TODO: Change the variable name
-        readConfig.read('./config.ini') #TODO: add config check
-        print(readConfig.sections())
+        readConfig.read('./config.ini') #TODO: add config check - Done.
+        try:
+            if len(readConfig) == 0:
+                raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file - Done.
+        except:
+            print("The configuration file is empty")
         self.__DISCOVERY_IP = readConfig['DiscoveryServer']['IP']
         self.__DISCOVERY_PORT = int(readConfig['DiscoveryServer']['PORT'])
         self.__FORMAT = readConfig['Client']['FORMAT']
@@ -93,12 +97,12 @@ class Client():
 
     def __create_thread(self):
         #Connect to discovery server
-        #TODO: Make this self explantory
-        receive_thread = threading.Thread(target=self.__receive_message)
-        receive_thread.start()
+        #TODO: Make this self explantory - Done.
+        receive_message_thread = threading.Thread(target=self.__receive_message)
+        receive_message_thread.start()
 
-        write_thread = threading.Thread(target=self.__write_message)
-        write_thread.start()
+        write_message_thread = threading.Thread(target=self.__write_message)
+        write_message_thread.start()
 
 if __name__ == "__main__":
     # nickname = input('what is your nickname?\n')

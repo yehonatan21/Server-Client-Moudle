@@ -1,16 +1,12 @@
 import logging
 import sys
-import traceback
 import socket
 from configparser import ConfigParser
+from getTraceback import getTracbace
 sys.path.append('../Server')  
 from server import Server 
 import os #TODO: Import only when debug
 print(os.getcwd()) #TODO: change to logging
-
-def get_traceback(e): #TODO: Take out to separeated moudle
-    lines = traceback.__FORMAT_exception(type(e), e, e.__traceback__)
-    return ''.join(lines)
 
 #TODO: send codes insted of strings to the client 
 #TODO: documaent all the code using pydoc - https://docs.python.org/3/library/pydoc.html
@@ -19,9 +15,12 @@ class ChatServer(Server):
     def __init__(self, port):
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
             self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
-            readFile = self.serverConfig.read('./config.ini')
-            if len(readFile) == 0:
-                raise NameError("No configuration file")
+            self.__myTrace = getTracbace()
+            try:
+                if len(self.serverConfig) == 0:
+                    raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file  Done.
+            except:
+                print("The configuration file is empty")
             self.__FORMAT = self.serverConfig ['MSG']['FORMAT']
             self.__clientnick = {}
 
@@ -49,7 +48,7 @@ class ChatServer(Server):
                 if self.__handle_messsage(message, client):
                     break
             except Exception as e:
-                get_traceback(e)
+                self.__myTrace.get_traceback(e)
                 logging.info(e)
                 # BUG: after kicking the client the server is trying to acsses it.
                 client.send('You left the chat room'.encode(self.__FORMAT))

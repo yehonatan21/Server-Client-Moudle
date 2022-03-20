@@ -1,5 +1,4 @@
 #FIXME: create log file for all the flies in the program acorrdinig to ther name, and add date and time (with ms) - Done.
-
 # from ctypes.wintypes import MSG
 import socket
 import os #TODO: Import only when debug
@@ -14,9 +13,12 @@ class discoveryServer(Server):
         super().__init__(port, socket.SOCK_DGRAM, "Discovery Server")
         self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
         
-        readFile = self.serverConfig.read('./config.ini')
-        if len(readFile) == 0:
-            raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file.
+        readConfig = self.serverConfig.read('./config.ini')
+        try:
+            if len(readConfig) == 0:
+                raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file - Done.
+        except:
+            print("The configuration file is empty")
         self.__HOST = self.serverConfig['IP']['HOST']
         self.__PORT =self.serverConfig['IP']['PORT']
         self.__FORMAT = self.serverConfig ['MSG']['FORMAT']

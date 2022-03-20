@@ -3,7 +3,8 @@
 
 import socket
 import threading
-import traceback
+from  getTraceback import getTraceback
+# import traceback
 import logging
 # import os
 # print(os.getcwd())
@@ -11,9 +12,9 @@ import logging
 # TODO: kill the server 
 
 
-def get_traceback(e): #TODO: Take out to separeated moudle
-    lines = traceback.format_exception(type(e), e, e.__traceback__)
-    return ''.join(lines)
+# def get_traceback(e): #TODO: Take out to separeated moudle - Done.
+#     lines = traceback.format_exception(type(e), e, e.__traceback__)
+#     return ''.join(lines)
 
 #TODO: Change all prints in all modules to logging - https://docs.python.org/3/howto/logging.html - Done.
 class Server():
@@ -34,13 +35,18 @@ class Server():
             level=logging.DEBUG,
             format='%(asctime)s: %(levelname)s: %(message)s'
         )
+        logging.basicConfig(
+            filename=f'{loggingName}.logs',
+            level=logging.INFO,
+            format='%(asctime)s: %(levelname)s: %(message)s'
+        )
 
     def startServer(self):
         host = socket.gethostbyname('')
-        print(f'trying to bind on port {self.__port}') #FIXME: logging level - INFO
+        logging.info(f'trying to bind on port {self.__port}') #FIXME: logging level - INFO - Done.
         self.__listener.bind((host,self.__port))
         isTCP = self.__listener.type == socket.SocketKind.SOCK_STREAM
-        print(f'Is TCP: {isTCP}') #FIXME: logging level - debug
+        logging.debug(f'Is TCP: {isTCP}') #FIXME: logging level - debug - Done.
         msg = None
         bufferSize = 1024
         while True:
@@ -53,7 +59,7 @@ class Server():
                 logging.debug(f'UDP Server is running on port {self.__port}...')
                 client = self.__listener
                 msg, address  = self.__listener.recvfrom(bufferSize) #msg is decleared for convention 
-            thread = threading.Thread(target=self.__handle_client, args=(client, address)) #TODO: send also message
+            thread = threading.Thread(target=self.__handle_client, args=(client, address)) #TODO: send also message - why?
             thread.start()
         
     def __handle_client(self, client, address, message=None):
