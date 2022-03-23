@@ -12,7 +12,6 @@ class discoveryServer(Server):
     def __init__(self, port):
         super().__init__(port, socket.SOCK_DGRAM, "Discovery Server")
         self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
-        
         readConfig = self.serverConfig.read('./config.ini')
         try:
             if len(readConfig) == 0:

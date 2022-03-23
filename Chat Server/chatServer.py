@@ -2,20 +2,22 @@ import logging
 import sys
 import socket
 from configparser import ConfigParser
-from getTraceback import getTracbace
 sys.path.append('../Server')  
 from server import Server 
-import os #TODO: Import only when debug
-print(os.getcwd()) #TODO: change to logging
+from getTraceback import getTracbace
+# import os #TODO: Import only when debug
+# print(os.getcwd()) #TODO: change to logging
 
-#TODO: send codes insted of strings to the client 
+#TODO: send codes insted of strings to the client
 #TODO: documaent all the code using pydoc - https://docs.python.org/3/library/pydoc.html
 
 class ChatServer(Server):
     def __init__(self, port):
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
             self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
+            readConfig = self.serverConfig.read('./config.ini')
             self.__myTrace = getTracbace()
+          
             try:
                 if len(self.serverConfig) == 0:
                     raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file  Done.

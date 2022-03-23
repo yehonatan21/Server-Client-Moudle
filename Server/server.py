@@ -3,8 +3,7 @@
 
 import socket
 import threading
-from  getTraceback import getTraceback
-# import traceback
+# import getTraceback
 import logging
 # import os
 # print(os.getcwd())
@@ -35,11 +34,7 @@ class Server():
             level=logging.DEBUG,
             format='%(asctime)s: %(levelname)s: %(message)s'
         )
-        logging.basicConfig(
-            filename=f'{loggingName}.logs',
-            level=logging.INFO,
-            format='%(asctime)s: %(levelname)s: %(message)s'
-        )
+       
 
     def startServer(self):
         host = socket.gethostbyname('')
