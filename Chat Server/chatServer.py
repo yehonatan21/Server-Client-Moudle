@@ -6,9 +6,6 @@ sys.path.append('../Server')
 from server import Server 
 from getTraceback import getTracbace
 
-# import os #TODO: Import only when debug
-# print(os.getcwd()) #TODO: change to logging
-
 #TODO: send codes insted of strings to the client - JSON?
 #TODO: documaent all the code using pydoc - https://docs.python.org/3/library/pydoc.html
 
@@ -28,18 +25,6 @@ class ChatServer(Server):
                 print("The configuration file is empty")
             self.__FORMAT = self.__serverConfig ['MSG']['FORMAT']
             self.__clientnick = {}
-
-    # def is_debug(self):
-    #     gettrace = getattr(sys, 'gettrace', None)
-
-    #     if gettrace is None:
-    #         return False
-    #     else:
-    #         v = gettrace()
-    #         if v is None:
-    #             return False
-    #         else:
-    #             return True
 
     def __broadcast(self, message, sender=None):
         for client in self.__clientnick:
