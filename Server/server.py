@@ -3,19 +3,14 @@
 
 import socket
 import threading
-# import getTraceback
 import logging
-# import os
-# print(os.getcwd())
-
-# TODO: kill the server 
+# import os #TODO: Import only when debug
+# print(os.getcwd()) #TODO: change to logging
 
 
-# def get_traceback(e): #TODO: Take out to separeated moudle - Done.
-#     lines = traceback.format_exception(type(e), e, e.__traceback__)
-#     return ''.join(lines)
-
+#TODO: kill the server with keybaerd event
 #TODO: Change all prints in all modules to logging - https://docs.python.org/3/howto/logging.html - Done.
+
 class Server():
     def startServer():
         pass

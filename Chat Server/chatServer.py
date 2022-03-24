@@ -5,26 +5,41 @@ from configparser import ConfigParser
 sys.path.append('../Server')  
 from server import Server 
 from getTraceback import getTracbace
+
 # import os #TODO: Import only when debug
 # print(os.getcwd()) #TODO: change to logging
 
-#TODO: send codes insted of strings to the client
+#TODO: send codes insted of strings to the client - JSON?
 #TODO: documaent all the code using pydoc - https://docs.python.org/3/library/pydoc.html
 
 class ChatServer(Server):
     def __init__(self, port):
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
-            self.serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
-            readConfig = self.serverConfig.read('./config.ini')
+            self.__serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
+            self.__readserverConfig = self.__serverConfig.read('./config.ini')
             self.__myTrace = getTracbace()
-          
+            if(self.__myTrace.is_debug()):
+                import os #TODO: Import only when debug - Done.
+                logging.debug(os.getcwd()) #TODO: change to logging - Done.
             try:
-                if len(self.serverConfig) == 0:
+                if len(self.__readserverConfig) == 0:
                     raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file  Done.
             except:
                 print("The configuration file is empty")
-            self.__FORMAT = self.serverConfig ['MSG']['FORMAT']
+            self.__FORMAT = self.__serverConfig ['MSG']['FORMAT']
             self.__clientnick = {}
+
+    # def is_debug(self):
+    #     gettrace = getattr(sys, 'gettrace', None)
+
+    #     if gettrace is None:
+    #         return False
+    #     else:
+    #         v = gettrace()
+    #         if v is None:
+    #             return False
+    #         else:
+    #             return True
 
     def __broadcast(self, message, sender=None):
         for client in self.__clientnick:
@@ -39,7 +54,7 @@ class ChatServer(Server):
         if self.__if_admin(client, nickname):
             return
         self.__clientnick[client] = nickname
-        logging.info(f'The nickname of this client is {self.__clientnick[client]}')
+        # logging.info(f'The nickname of this client is {self.__clientnick[client]}')
         if nickname != 'admin':
             client.send('you are now connected!'.encode(self.__FORMAT))
         self.__broadcast(
@@ -103,7 +118,7 @@ class ChatServer(Server):
             self.__broadcast(message, client)
 
     def __close_connection(self, message, client):
-        logging.info(client)
+        # logging.debug(client)
         client.send(message.encode(self.__FORMAT))
         self.__broadcast(
             f'{self.__clientnick[client]} has left the chat room!', client)

@@ -2,9 +2,9 @@ import socket
 import threading
 import logging
 from configparser import ConfigParser
-# import os #TODO: Import only when debug
-# print(os.getcwd()) #TODO: change to logging
+from getTraceback import getTracbace
 
+#TODO: send codes insted of strings to the client - JSON?
 #TODO: sepeareat to coreClient and clientImplementaion
 class Client():
     def __init__(self, nick, password = None): #TODO: Talk about the password
@@ -16,6 +16,11 @@ class Client():
             level=logging.DEBUG,
             format='%(asctime)s: %(levelname)s: %(message)s'
         )
+        self.__myTrace = getTracbace()
+        if(self.__myTrace.is_debug()):
+            import os #TODO: Import only when debug - Done.
+            logging.debug(os.getcwd()) #TODO: change to logging - Done.
+        
         clientConfig = ConfigParser()#TODO: Change the variable name - Done
         clientConfig.read('./config.ini') #TODO: add config check - Done.
         try:
@@ -26,8 +31,8 @@ class Client():
         self.__DISCOVERY_IP = clientConfig['DiscoveryServer']['IP']
         self.__DISCOVERY_PORT = int(clientConfig['DiscoveryServer']['PORT'])
         self.__FORMAT = clientConfig['Client']['FORMAT']
-        # print(self.__DISCOVERY_IP)
-        # print(self.__DISCOVERY_PORT)
+        # logging.debug(self.__DISCOVERY_IP)
+        # logging.debug(self.__DISCOVERY_PORT)
 
     def connectClientToServer(self):
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
