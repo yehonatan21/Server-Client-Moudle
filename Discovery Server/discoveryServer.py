@@ -7,6 +7,7 @@ import sys
 sys.path.append('../Server') #TODO: Add this to the configuration?
 from server import Server 
 from configparser import ConfigParser
+import logging
 
 class discoveryServer(Server):
     def __init__(self, port):
@@ -25,7 +26,7 @@ class discoveryServer(Server):
     def _Server__handle_client(self, client, address):
         chatServerHost = self.serverConfig['chatServer']['HOST']
         chatServerPort =self.serverConfig['chatServer']['PORT']
-        print(f'sending to {address[0]},{address[1]}: "{chatServerHost}:{chatServerPort}"')
+        logging.debug(f'sending to {address[0]},{address[1]}: "{chatServerHost}:{chatServerPort}"')
         client.sendto(f'{chatServerHost}:{chatServerPort}'.encode(self.__FORMAT), (address[0],address[1]))
 
 

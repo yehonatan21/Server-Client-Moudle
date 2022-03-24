@@ -1,8 +1,9 @@
 import socket
 import threading
+import logging
 from configparser import ConfigParser
-import os #TODO: Import only when debug
-print(os.getcwd()) #TODO: change to logging
+# import os #TODO: Import only when debug
+# print(os.getcwd()) #TODO: change to logging
 
 #TODO: sepeareat to coreClient and clientImplementaion
 class Client():
@@ -10,18 +11,23 @@ class Client():
         self.__nickname = nick
         self.__password = password
         self.__stop_loops = False
-        readConfig = ConfigParser()#TODO: Change the variable name
-        readConfig.read('./config.ini') #TODO: add config check - Done.
+        logging.basicConfig(
+            filename='client.logs',
+            level=logging.DEBUG,
+            format='%(asctime)s: %(levelname)s: %(message)s'
+        )
+        clientConfig = ConfigParser()#TODO: Change the variable name - Done
+        clientConfig.read('./config.ini') #TODO: add config check - Done.
         try:
-            if len(readConfig) == 0:
+            if len(clientConfig) == 0:
                 raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file - Done.
         except:
             print("The configuration file is empty")
-        self.__DISCOVERY_IP = readConfig['DiscoveryServer']['IP']
-        self.__DISCOVERY_PORT = int(readConfig['DiscoveryServer']['PORT'])
-        self.__FORMAT = readConfig['Client']['FORMAT']
-        print(self.__DISCOVERY_IP)
-        print(self.__DISCOVERY_PORT)
+        self.__DISCOVERY_IP = clientConfig['DiscoveryServer']['IP']
+        self.__DISCOVERY_PORT = int(clientConfig['DiscoveryServer']['PORT'])
+        self.__FORMAT = clientConfig['Client']['FORMAT']
+        # print(self.__DISCOVERY_IP)
+        # print(self.__DISCOVERY_PORT)
 
     def connectClientToServer(self):
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -31,16 +37,16 @@ class Client():
         bufferSize = 1024
         msgFromServer = self.__client.recvfrom(bufferSize)
         msg = msgFromServer[0].decode(self.__FORMAT)
-        print(f'Message from Discovery Server: "{msg}"')
+        logging.debug(f'Message from Discovery Server: "{msg}"')
         connectionInfo = msg.split(':')
         self.__HOST = connectionInfo[0]
         self.__PORT = int(connectionInfo[1])
-        print(f'About to connect to: {self.__HOST}:{self.__PORT}')
+        logging.debug(f'About to connect to: {self.__HOST}:{self.__PORT}')
         
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(f'trying to connect to {self.__HOST}:{self.__PORT}')
+        logging.debug(f'trying to connect to {self.__HOST}:{self.__PORT}')
         self.__client.connect((self.__HOST,self.__PORT))
-        print(f'connected succefuly to {self.__HOST}:{self.__PORT}')
+        logging.debug(f'connected succefuly to {self.__HOST}:{self.__PORT}')
         self.__create_thread()
         
     def __printToUser(self, message):
