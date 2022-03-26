@@ -2,7 +2,7 @@ import socket
 import threading
 import logging
 from configparser import ConfigParser
-from getTraceback import getTracbace
+from myTraceback import myTraceback
 
 #TODO: send codes insted of strings to the client - JSON?
 #TODO: sepeareat to coreClient and clientImplementaion
@@ -16,7 +16,7 @@ class Client():
             level=logging.DEBUG,
             format='%(asctime)s: %(levelname)s: %(message)s'
         )
-        self.__myTrace = getTracbace()
+        self.__myTrace = myTraceback()
         if(self.__myTrace.is_debug()):
             import os #TODO: Import only when debug - Done.
             logging.debug(os.getcwd()) #TODO: change to logging - Done.

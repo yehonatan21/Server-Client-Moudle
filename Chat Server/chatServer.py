@@ -4,7 +4,7 @@ import socket
 from configparser import ConfigParser
 sys.path.append('../Server')  
 from server import Server 
-from getTraceback import getTracbace
+from myTraceback import myTraceback
 
 #TODO: send codes insted of strings to the client - JSON?
 #TODO: documaent all the code using pydoc - https://docs.python.org/3/library/pydoc.html
@@ -14,7 +14,7 @@ class ChatServer(Server):
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
             self.__serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
             self.__readserverConfig = self.__serverConfig.read('./config.ini')
-            self.__myTrace = getTracbace()
+            self.__myTrace = myTraceback()
             if(self.__myTrace.is_debug()):
                 import os #TODO: Import only when debug - Done.
                 logging.debug(os.getcwd()) #TODO: change to logging - Done.

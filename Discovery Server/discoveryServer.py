@@ -6,14 +6,14 @@ sys.path.append('../Server') #TODO: Add this to the configuration?
 from server import Server 
 from configparser import ConfigParser
 import logging
-from getTraceback import getTracbace
+from myTraceback import myTraceback
 
 class discoveryServer(Server):
     def __init__(self, port):
         super().__init__(port, socket.SOCK_DGRAM, "Discovery Server")
         self.__serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle? - Done
         self.__readserverConfig = self.__serverConfig.read('./config.ini')
-        self.__myTrace = getTracbace()
+        self.__myTrace = myTraceback()
         if(self.__myTrace.is_debug()):
                 import os #TODO: Import only when debug - Done.
                 logging.debug(os.getcwd()) #TODO: change to logging - Done.

@@ -4,15 +4,14 @@
 import socket
 import threading
 import logging
-# import os #TODO: Import only when debug
-# print(os.getcwd()) #TODO: change to logging
+from myTraceback import myTraceback
 
 
 #TODO: kill the server with keybaerd event
 #TODO: Change all prints in all modules to logging - https://docs.python.org/3/howto/logging.html - Done.
 
 class Server():
-    def startServer():
+    def startServer(): 
         pass
     
     def stopServer():
@@ -24,17 +23,21 @@ class Server():
     def __init__(self, port, socketType, loggingName = __name__):
         self.__port = port
         self.__listener = socket.socket(socket.AF_INET, socketType)
-        logging.basicConfig(
-            filename=f'{loggingName}.logs',
-            level=logging.DEBUG,
-            format='%(asctime)s: %(levelname)s: %(message)s'
-        )
-        logging.basicConfig(
-            filename=f'{loggingName}.logs',
-            level=logging.INFO,
-            format='%(asctime)s: %(levelname)s: %(message)s'
-        )
-       
+        self.__myTrace = myTraceback()
+        if(self.__myTrace.is_debug()):
+            logging.basicConfig(
+                filename=f'{loggingName}-debug.logs',
+                level=logging.DEBUG,
+                format='%(asctime)s: %(levelname)s: %(message)s'
+            )
+            import os #TODO: Import only when debug - Done.
+            logging.debug(os.getcwd()) #TODO: change to logging - Done.
+        else:
+            logging.basicConfig(
+                filename=f'{loggingName}.logs',
+                level=logging.INFO,
+                format='%(asctime)s: %(levelname)s: %(message)s'
+            )
 
     def startServer(self):
         host = socket.gethostbyname('')
