@@ -44,14 +44,14 @@ class Client():
         msg = msgFromServer[0].decode(self.__FORMAT)
         logging.debug(f'Message from Discovery Server: "{msg}"')
         connectionInfo = msg.split(':')
-        self.__HOST = connectionInfo[0]
+        __HOST = connectionInfo[0]
         self.__PORT = int(connectionInfo[1])
-        logging.debug(f'About to connect to: {self.__HOST}:{self.__PORT}')
+        logging.debug(f'About to connect to: {__HOST}:{self.__PORT}')
         
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        logging.debug(f'trying to connect to {self.__HOST}:{self.__PORT}')
-        self.__client.connect((self.__HOST,self.__PORT))
-        logging.debug(f'connected succefuly to {self.__HOST}:{self.__PORT}')
+        logging.debug(f'trying to connect to {__HOST}:{self.__PORT}')
+        self.__client.connect((__HOST,self.__PORT))
+        logging.debug(f'connected succefuly to {__HOST}:{self.__PORT}')
         self.__create_thread()
         
     def __printToUser(self, message):
