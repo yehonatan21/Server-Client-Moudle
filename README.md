@@ -19,7 +19,7 @@ python 3.8 and above installed.
 3. When both of the servers ars running run the client.py inseparate terminal window and connect to the chat server.
 
 >Note:
- - The server configurations is seted to local host. you can change is in the config.ini files.
+ - The server configurations is seted to local host. you can change this in the config.ini files.
 
 ## License & Copyright
 
