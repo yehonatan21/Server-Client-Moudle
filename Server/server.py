@@ -6,21 +6,21 @@ import threading
 import logging
 from myTraceback import myTraceback
 
-
 #TODO: kill the server with keybaerd event
-#TODO: Change all prints in all modules to logging - https://docs.python.org/3/howto/logging.html - Done.
 
 class Server():
+    
     def startServer(): 
-        pass
+        pass #TODO: implemet
     
     def stopServer():
-        pass
+        pass #TODO: implemet
     
     def restartServer():
-        pass
+        pass #TODO: implemet
 
     def __init__(self, port, socketType, loggingName = __name__):
+        """Reading the Configuration file, creating the class instances and creating costum logging file"""
         self.__port = port
         self.__listener = socket.socket(socket.AF_INET, socketType)
         self.__myTrace = myTraceback()
@@ -30,8 +30,8 @@ class Server():
                 level=logging.DEBUG,
                 format='%(asctime)s: %(levelname)s: %(message)s'
             )
-            import os #TODO: Import only when debug - Done.
-            logging.debug(os.getcwd()) #TODO: change to logging - Done.
+            import os
+            logging.debug(os.getcwd())
         else:
             logging.basicConfig(
                 filename=f'{loggingName}.logs',
@@ -40,11 +40,12 @@ class Server():
             )
 
     def startServer(self):
+        """Creating server with the default parameters or with parameters from the chiled class"""
         host = socket.gethostbyname('')
-        logging.info(f'trying to bind on port {self.__port}') #FIXME: logging level - INFO - Done.
+        logging.info(f'trying to bind on port {self.__port}') 
         self.__listener.bind((host,self.__port))
         isTCP = self.__listener.type == socket.SocketKind.SOCK_STREAM
-        logging.debug(f'Is TCP: {isTCP}') #FIXME: logging level - debug - Done.
+        logging.debug(f'Is TCP: {isTCP}')
         msg = None
         bufferSize = 1024
         while True:
@@ -61,6 +62,7 @@ class Server():
             thread.start()
         
     def __handle_client(self, client, address, message=None):
+        """This will be implemented in the chiled class"""
         print(message)
         client.sendto(str.encode("SUCCESS"), address)
 

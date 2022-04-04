@@ -8,24 +8,30 @@ from clientTraceback import clientTraceback
 #TODO: sepeareat to coreClient and clientImplementaion
 class Client():
     def __init__(self, nick, password = None): #TODO: Talk about the password
+        """Reading the Configuration file, creating the class instances and creating costum logging file"""
         self.__nickname = nick
         self.__password = password
         self.__stop_loops = False
-        logging.basicConfig(
-            filename='client.logs',
-            level=logging.DEBUG,
-            format='%(asctime)s: %(levelname)s: %(message)s'
-        )
         self.__myTrace = clientTraceback()
         if(self.__myTrace.is_debug()):
-            import os #TODO: Import only when debug - Done.
-            logging.debug(os.getcwd()) #TODO: change to logging - Done.
-        
-        clientConfig = ConfigParser()#TODO: Change the variable name - Done
-        clientConfig.read('./config.ini') #TODO: add config check - Done.
+            import os
+            logging.debug(os.getcwd())
+            logging.basicConfig(
+                filename='client-debug.logs',
+                level=logging.DEBUG,
+                format='%(asctime)s: %(levelname)s: %(message)s'
+            )
+        else:
+            logging.basicConfig(
+                filename='client.logs',
+                level=logging.INFO,
+                format='%(asctime)s: %(levelname)s: %(message)s'
+            )
+        clientConfig = ConfigParser()
+        clientConfig.read('./config.ini')
         try:
             if len(clientConfig) == 0:
-                raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file - Done.
+                raise NameError("No configuration file")
         except:
             print("The configuration file is empty")
         self.__DISCOVERY_IP = clientConfig['DiscoveryServer']['IP']
@@ -35,6 +41,7 @@ class Client():
         # logging.debug(self.__DISCOVERY_PORT)
 
     def connectClientToServer(self):
+        """Connecting to discovery server to get the host and pord of the chat server and then connecting to chat server"""
         self.__client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         # Send to server using created UDP socket
         serverAddressPort = (self.__DISCOVERY_IP, self.__DISCOVERY_PORT)
@@ -52,12 +59,14 @@ class Client():
         logging.debug(f'trying to connect to {__HOST}:{self.__PORT}')
         self.__client.connect((__HOST,self.__PORT))
         logging.debug(f'connected succefuly to {__HOST}:{self.__PORT}')
-        self.__create_thread()
+        self.__create_threads()
         
     def __printToUser(self, message):
+        """Printing recived messages"""
         print(message)
 
     def __receive_message(self):
+        """reciveing message from the server"""
         while True:
             if self.__stop_loops:
                 break
@@ -96,6 +105,7 @@ class Client():
                 self.__stop_loops = True
 
     def __write_message(self):
+        """writeing message to the server"""
         message = None
         while True:
             if self.__stop_loops or message == "/exit":
@@ -104,11 +114,11 @@ class Client():
             self.__client.send(message.encode(self.__FORMAT))
     
     def __connectServer(self, serverIP):
+        """Connecting the client to the recived IP from discovery server"""
         self.__client.connect((serverIP,self.__PORT))
 
-    def __create_thread(self):
-        #Connect to discovery server
-        #TODO: Make this self explantory - Done.
+    def __create_threads(self):
+        """Creating threads for reciveing and writeing messages"""
         receive_message_thread = threading.Thread(target=self.__receive_message)
         receive_message_thread.start()
 

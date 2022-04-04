@@ -11,27 +11,30 @@ from myTraceback import myTraceback
 
 class ChatServer(Server):
     def __init__(self, port):
+            """Reading the Configuration file and creating the class instances"""
             super().__init__(port, socket.SOCK_STREAM, "Chat Server")
-            self.__serverConfig = ConfigParser() #TODO: Change to private or take out to a sepeart moudle?
-            self.__readserverConfig = self.__serverConfig.read('./config.ini')
+            self.__serverConfig = ConfigParser() 
+            __readserverConfig = self.__serverConfig.read('./config.ini')
             self.__myTrace = myTraceback()
             if(self.__myTrace.is_debug()):
-                import os #TODO: Import only when debug - Done.
-                logging.debug(os.getcwd()) #TODO: change to logging - Done.
+                import os
+                logging.debug(os.getcwd()) 
             try:
-                if len(self.__readserverConfig) == 0:
-                    raise NameError("No configuration file")#TODO: Put a normal exception OR decide what happens if no configuration exists - NameError: No configuration file  Done.
+                if len(__readserverConfig) == 0:
+                    raise NameError("No configuration file")
             except:
                 print("The configuration file is empty")
             self.__FORMAT = self.__serverConfig ['MSG']['FORMAT']
             self.__clientnick = {}
 
     def __broadcast(self, message, sender=None):
+        """Brodcast the message to all clients"""
         for client in self.__clientnick:
             if self.__clientnick.get(sender) != self.__clientnick.get(client):
                 client.send(message.encode(self.__FORMAT))
 
     def _Server__handle_client(self, client, address):
+        """Adding the client to the connected client's doctionery"""
         client.send('nickname'.encode(self.__FORMAT))
         nickname = client.recv(1024).decode(self.__FORMAT)
         if self.__if_nickname_exist(nickname, client):
@@ -39,7 +42,7 @@ class ChatServer(Server):
         if self.__if_admin(client, nickname):
             return
         self.__clientnick[client] = nickname
-        # logging.info(f'The nickname of this client is {self.__clientnick[client]}')
+        logging.debug(f'The nickname of this client is {self.__clientnick[client]}')
         if nickname != 'admin':
             client.send('you are now connected!'.encode(self.__FORMAT))
         self.__broadcast(
@@ -61,6 +64,7 @@ class ChatServer(Server):
                 break
 
     def __if_admin(self, client, nickname):
+        """Checking if the this client is the admin"""
         if nickname == 'admin':
             client.send('PASS'.encode(self.__FORMAT))
             password = client.recv(1024).decode(self.__FORMAT)
@@ -73,6 +77,7 @@ class ChatServer(Server):
                     'You logged in as an administrator.'.encode(self.__FORMAT))
 
     def __if_nickname_exist(self, nickname, client):
+        """Checking if the there is a connected client with this name"""
         for checkclient in self.__clientnick:
             if nickname == self.__clientnick.get(checkclient):
                 client.send('This nickname is already exist. Please send a new nickname'.encode(self.__FORMAT))  # FIXME: insted of disconnection let the client choose another nickname
@@ -80,6 +85,7 @@ class ChatServer(Server):
                 return True
 
     def __handle_messsage(self, message, client):
+        """Checking if the message is a commend"""
         if message == '/exit':
             exit_message = 'You have discinnected successfully.'
             self.__close_connection(exit_message, client)
@@ -103,6 +109,7 @@ class ChatServer(Server):
             self.__broadcast(message, client)
 
     def __close_connection(self, message, client):
+        """Closing the connection between the server and the client"""
         # logging.debug(client)
         client.send(message.encode(self.__FORMAT))
         self.__broadcast(
