@@ -1,26 +1,30 @@
 # Chat Server: Client - Server Moudle
 
-**version 1.0.0**
+**Version 1.0.0**
 
-## Structure: ## 
+## Glossary
+ - Discovery Server
+   - Provides a discovery server across the LAN and allows clients to find the right server. 
+ - Chat Server
+   - The server that is responsbile on connecting people.
+ - Client
+   - The way 2 or more people communicate with each other
 
-The system 2 server moudles inheriting from server class: Discovey Server(UDP) and Chat Server(TCP).
+## How it works
+1. The discovery server.py is providing the host and port to the client.
+2. After the host and port from the discovery server, the client is connecting to the chat server.
+3. the chat server is sending the client message to all the connected clients.
 
-The client is connecting to the discovery server to recive the host and port for the chat server.
+## Requirements:
+Python 3.8 and above
 
-After reciving the chat server host and port the client connecting to chat server.
-
-## Requirements: ##
-python 3.8 and above installed.
-
-## Run: ## 
-1. To run the program you need to load the discoveryServer.py first.
-2. After the discoveryServer.py is running, run the chatServer.py in new terminal window.
-3. When both of the servers ars running run the client.py inseparate terminal window and connect to the chat server.
-
->Note:
- - The server configurations is seted to local host. you can change this in the config.ini files.
+## How to run:
+### Configuration
+>The server configurations is set to local host. you can change this in the config.ini file thaqt is located in each directory respectivly.
+### Execute
+1. Start *discoveryServer.py* by running ```python discoveryServer.py```
+2. Start *chatServer.py ```python chatServer.py```
+3. Start *client.py ```python client.py```
 
 ## License & Copyright
-
 © Jonathan Shabtai
