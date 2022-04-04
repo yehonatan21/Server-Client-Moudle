@@ -23,8 +23,8 @@ Python 3.8 and above
 >The server configurations is set to local host. you can change this in the config.ini file thaqt is located in each directory respectivly.
 ### Execute
 1. Start *discoveryServer.py* by running ```python discoveryServer.py```
-2. Start *chatServer.py ```python chatServer.py```
-3. Start *client.py ```python client.py```
+2. Start *chatServer.py by running ```python chatServer.py```
+3. Start *client.py by running ```python client.py```
 
 ## License & Copyright
 © Jonathan Shabtai
