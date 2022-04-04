@@ -4,10 +4,8 @@
 
 ## Structure: ## 
 
-The system 2 server moudles inheriting from server class: Discovey Server(UDP) and Chat Server(TCP).
-
-The client is connecting to the discovery server to recive the host and port for the chat server.
-
+The system 2 server moudles inheriting from server class: Discovey Server(UDP) and Chat Server(TCP).\
+The client is connecting to the discovery server to recive the host and port for the chat server.\
 After reciving the chat server host and port the client connecting to chat server.
 
 ## Requirements: ##
