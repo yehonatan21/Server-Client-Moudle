@@ -28,3 +28,4 @@ Python 3.8 and above
 
 ## License & Copyright
 © Jonathan Shabtai
+
