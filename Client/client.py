@@ -126,8 +126,8 @@ class Client():
         write_message_thread.start()
 
 if __name__ == "__main__":
-    # nickname = input('what is your nickname?\n')
-    nickname = "TEST"
+    nickname = input('what is your nickname?\n')
+    # nickname = "TEST"
     password = None
     if nickname == 'admin':
         password = input('Plese enter the password:\n')
