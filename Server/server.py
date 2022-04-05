@@ -10,9 +10,6 @@ from myTraceback import myTraceback
 
 class Server():
     
-    def startServer(): 
-        pass #TODO: implemet
-    
     def stopServer():
         pass #TODO: implemet
     
@@ -40,7 +37,9 @@ class Server():
             )
 
     def startServer(self):
-        """Creating server with the default parameters or with parameters from the chiled class"""
+        """
+        Creating server with the default parameters or with parameters from the chiled class
+        """
         host = socket.gethostbyname('')
         logging.info(f'trying to bind on port {self.__port}') 
         self.__listener.bind((host,self.__port))
