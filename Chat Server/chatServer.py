@@ -11,30 +11,38 @@ from myTraceback import myTraceback
 
 class ChatServer(Server):
     def __init__(self, port):
-            """Reading the Configuration file and creating the class instances"""
-            super().__init__(port, socket.SOCK_STREAM, "Chat Server")
-            self.__serverConfig = ConfigParser() 
-            __readserverConfig = self.__serverConfig.read('./config.ini')
-            self.__myTrace = myTraceback()
-            if(self.__myTrace.is_debug()):
-                import os
-                logging.debug(os.getcwd()) 
-            try:
-                if len(__readserverConfig) == 0:
-                    raise NameError("No configuration file")
-            except:
-                print("The configuration file is empty")
-            self.__FORMAT = self.__serverConfig ['MSG']['FORMAT']
-            self.__clientnick = {}
+        """
+        Reading the Configuration file and creating the class instances
+        :param `port`: the port that the server is running on
+        """
+        super().__init__(port, socket.SOCK_STREAM, "Chat Server")
+        self.__serverConfig = ConfigParser() 
+        __readserverConfig = self.__serverConfig.read('./config.ini')
+        self.__myTrace = myTraceback()
+        if(self.__myTrace.is_debug()):
+            import os
+            logging.debug(os.getcwd()) 
+        try:
+            if len(__readserverConfig) == 0:
+                raise NameError("No configuration file")
+        except:
+            print("The configuration file is empty")
+        self.__FORMAT = self.__serverConfig ['MSG']['FORMAT']
+        self.__clientnick = {}
 
     def __broadcast(self, message, sender=None):
-        """Brodcast the message to all clients"""
+        """
+        Brodcast the message to all clients
+        :param message: the message from bla bla
+        :param sender: the sender of the bla bla
+        """
         for client in self.__clientnick:
             if self.__clientnick.get(sender) != self.__clientnick.get(client):
                 client.send(message.encode(self.__FORMAT))
 
     def _Server__handle_client(self, client, address):
         """Adding the client to the connected client's doctionery"""
+
         client.send('nickname'.encode(self.__FORMAT))
         nickname = client.recv(1024).decode(self.__FORMAT)
         if self.__if_nickname_exist(nickname, client):
@@ -116,7 +124,6 @@ class ChatServer(Server):
             f'{self.__clientnick[client]} has left the chat room!', client)
         del self.__clientnick[client]
         client.close()
-
 
 if __name__ == "__main__":
     s = ChatServer(6052)
