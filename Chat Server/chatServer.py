@@ -88,7 +88,7 @@ class ChatServer(Server):
         """Checking if the there is a connected client with this name"""
         for checkclient in self.__clientnick:
             if nickname == self.__clientnick.get(checkclient):
-                client.send('This nickname is already exist. Please send a new nickname'.encode(self.__FORMAT))  # FIXME: insted of disconnection let the client choose another nickname
+                client.send('This nickname is already exist.Plese connect again'.encode(self.__FORMAT))  # FIXME: insted of disconnection let the client choose another nickname
                 client.close()
                 return True
 
