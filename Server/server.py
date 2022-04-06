@@ -1,6 +1,7 @@
 #https://docs.python.org/3/howto/sockets.html
 #https://docs.python.org/3/library/socket.html
 
+from configparser import ConfigParser
 import keyboard
 import logging
 import socket
@@ -32,12 +33,23 @@ class Server():
                 level=logging.INFO,
                 format='%(asctime)s: %(levelname)s: %(message)s'
         )
+        self.__serverConfig = ConfigParser()
+        __readserverConfig = self.__serverConfig.read('./config.ini')
+        self.__myTrace = myTraceback()
+        if(self.__myTrace.is_debug()):
+                import os
+                logging.debug(os.getcwd())
+        try:
+            if len(__readserverConfig) == 0:
+                raise NameError("No configuration file")
+        except:
+            print("The configuration file is empty")
 
     def startServer(self):
         """
         Creating server with the default parameters or with parameters from the chiled class
         """
-        host = socket.gethostbyname('')
+        host = self.__serverConfig['IP']['HOST']
         logging.info(f'trying to bind on port {self.__port}') 
         self.__listener.bind((host,self.__port))
         isTCP = self.__listener.type == socket.SocketKind.SOCK_STREAM
