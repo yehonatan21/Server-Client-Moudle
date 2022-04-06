@@ -68,7 +68,8 @@ class Server():
                 self.__listener.close() 
                 print("The server stoped")
                 self.__running = False
-            time.sleep(1)
+                break
+            # time.sleep(1)
 
     def __handle_client(self, client, address, message=None):
         """This will be implemented in the chiled class"""
