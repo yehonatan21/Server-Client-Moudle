@@ -1,6 +1,9 @@
 # Chat Server: Client - Server Moudle
 
-**Version 1.0.0**
+**Version 1.0.1**
+
+## What's new
+Add option to kill server with keyboard event: ```crtl + q``` 
 
 ## Glossary
  - Discovery Server
