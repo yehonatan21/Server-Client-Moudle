@@ -17,6 +17,7 @@ Add option to kill server with keyboard event: ```crtl + q```
 1. The discovery server.py is providing the host and port to the client.
 2. After the host and port from the discovery server, the client is connecting to the chat server.
 3. the chat server is sending the client message to all the connected clients.
+  >All the moudles have 2 logging files: info and debug to check the program is workink as excpected.
 
 ## Requirements:
 Python 3.8 and above
@@ -24,10 +25,11 @@ Python 3.8 and above
 ## How to run:
 ### Configuration
 >The server configurations is set to local host. you can change this in the config.ini file thaqt is located in each directory respectivly.
+
 ### Execute
 1. Start *discoveryServer.py* by running ```python discoveryServer.py```
-2. Start *chatServer.py ```python chatServer.py```
-3. Start *client.py ```python client.py```
+2. Start *chatServer.py* ```python chatServer.py```
+3. Start *client.py* ```python client.py```
 
 ## License & Copyright
 © Jonathan Shabtai
