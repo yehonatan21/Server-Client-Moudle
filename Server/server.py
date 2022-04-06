@@ -10,15 +10,17 @@ import time
 from myTraceback import myTraceback
 
 class Server():
-    def restartServer():
-        pass #TODO: implemet
 
     def __init__(self, port, socketType, loggingName = __name__):
-        """Reading the Configuration file, creating the class instances and creating costum logging file"""
+        """Reading the Configuration file, creating the class instances, creating costum logging file and reading the configuration file"""
         self.__port = port
         self.__listener = socket.socket(socket.AF_INET, socketType)
         self.__myTrace = myTraceback()
         self.__running = True
+        self.__createLoggingFiles(loggingName)
+        self.__readConfig()
+
+    def __createLoggingFiles(self,loggingName):
         if(self.__myTrace.is_debug()):
             logging.basicConfig(
                 filename=f'{loggingName}-debug.logs',
@@ -33,6 +35,8 @@ class Server():
                 level=logging.INFO,
                 format='%(asctime)s: %(levelname)s: %(message)s'
         )
+
+    def __readConfig(self):
         self.__serverConfig = ConfigParser()
         __readserverConfig = self.__serverConfig.read('./config.ini')
         self.__myTrace = myTraceback()
@@ -44,7 +48,7 @@ class Server():
                 raise NameError("No configuration file")
         except:
             print("The configuration file is empty")
-
+    
     def startServer(self):
         """
         Creating server with the default parameters or with parameters from the chiled class
@@ -82,16 +86,16 @@ class Server():
                 self.__running = False
                 break
             # time.sleep(1)
-
+        
     def __handle_client(self, client, address, message=None):
         """This will be implemented in the chiled class"""
         print(message)
         client.sendto(str.encode("SUCCESS"), address)
 
     def __create_threads(self):
-        print("create threads: " + str(self))
-        listenToKeyboardEvent = threading.Thread(target=self.stopServer)
-        listenToKeyboardEvent.start()
+        logging.info("create threads: " + str(self))
+        stopServerKeyboardEvent = threading.Thread(target=self.stopServer)
+        stopServerKeyboardEvent.start()
 
 if __name__ == "__main__":
     s = Server()
