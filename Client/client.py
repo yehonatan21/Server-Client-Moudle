@@ -6,12 +6,13 @@ from clientTraceback import clientTraceback
 
 #TODO: send codes insted of strings to the client - JSON?
 #TODO: sepeareat to coreClient and clientImplementaion
+
 class Client():
     def __init__(self, nick, password = None): #TODO: Talk about the password
         """Reading the Configuration file, creating the class instances and creating costum logging file"""
         self.__nickname = nick
         self.__password = password
-        self.__stop_loops = False
+        self.__running = True
         self.__myTrace = clientTraceback()
         if(self.__myTrace.is_debug()):
             import os
@@ -67,9 +68,7 @@ class Client():
 
     def __receive_message(self):
         """reciveing message from the server"""
-        while True:
-            if self.__stop_loops:
-                break
+        while self.__running:
             try:
                 messageFromServer = self.__client.recv(1024).decode(self.__FORMAT)
                 if messageFromServer == 'nickname': #TODO: make it match-case insted of if-else?
@@ -80,23 +79,26 @@ class Client():
                         messageFromServer = self.__client.recv(1024).decode(self.__FORMAT)
                         if messageFromServer == 'Refuse':
                             self.__printToUser('Connection refused. Wrong password!')
-                            self.__stop_loops = True
+                            self.__running = False
                         else:
                             self.__printToUser(messageFromServer) 
                     else:
                         self.__printToUser(messageFromServer) 
                 else:
                     self.__printToUser(messageFromServer) 
-                if messageFromServer == 'You have discinnected successfully.' or 'This nickname is already exist.Plese connect again' or 'Refuse' or 'You left the chat room' or 'You have been kicket from the chat room': #TODO: get codes insted of strings
-                    self.__stop_loops = True
+
+                if messageFromServer == ('You have discinnected successfully.' or 'Refuse' or 'You left the chat room' or 'You have been kicket from the chat room'): #TODO: get codes insted of strings
+                    self.__running = False
                 
-                # if messageFromServer == 'This nickname is already exist.Plese connect again':
-                #     self.__stop_loops = True
+                if messageFromServer == 'This nickname is already exist.Plese choose new one':
+                    nickname = input("")
+                    print(nickname) 
                 
                 if messageFromServer == '':
                     self.__printToUser('The server is down. Click enter to exit.')
                     self.__client.close()
-                    self.__stop_loops = True
+                    self.__running = False
+
                 if messageFromServer == 'IP':
                     self.__client.send('send'.encode(self.__FORMAT))
                     serverIP = self.__client.recv(1024).decode(self.__FORMAT)
@@ -106,14 +108,12 @@ class Client():
                 logging.debug(e)
                 self.__printToUser('An error occured!')
                 self.__client.close()
-                self.__stop_loops = True
+                self.__running = False
+                break
 
     def __write_message(self):
         """writeing message to the server"""
-        message = None
-        while True:
-            if self.__stop_loops or message == "/exit":
-                break
+        while self.__running or message == "/exit":
             message = f'{input("")}'
             self.__client.send(message.encode(self.__FORMAT))
     
